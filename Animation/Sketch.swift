@@ -11,11 +11,14 @@ class Sketch : NSObject {
     let turtle: Tortoise
     let secondTurtle: Tortoise
     let thirdTurtle: Tortoise
+    let fourthTurtle: Tortoise
 
     // L-systems
     let anotherKochConstruction: LindenmayerSystem
     let kochIsland: LindenmayerSystem
     let coniferousTree: LindenmayerSystem
+    let genericSystem: LindenmayerSystem
+    
     
     // This function runs once
     override init() {
@@ -30,7 +33,7 @@ class Sketch : NSObject {
         turtle = Tortoise(drawingUpon: canvas)
         secondTurtle = Tortoise(drawingUpon: canvas)
         thirdTurtle = Tortoise(drawingUpon: canvas)
-
+        fourthTurtle = Tortoise(drawingUpon: canvas)
         // Create two deterministic systems
         anotherKochConstruction = LindenmayerSystem(axiom: "S-F",
                                                     length: 100,
@@ -52,6 +55,19 @@ class Sketch : NSObject {
                                        pointToStartRenderingFrom: Point(x: 0, y: 100),
                                        turtleToRenderWith: secondTurtle)
         
+        genericSystem = LindenmayerSystem(axiom: "SF-F-F-F",
+                                          length: 50,
+                                          initialDirection: 90,
+                                          angle: 90,
+                                          reduction: 4,
+                                          rules: [
+                                            "F" : [RuleSet(odds: 1, successorText: "F+f-FF+F+FF+Ff+FF-f+FF-F-FF-Ff-FFF")],
+                                            "f" : [RuleSet(odds: 1, successorText: "ffffff")]
+                                                 ],
+                                          generations: 2,
+                                          pointToStartRenderingFrom: Point(x: 250, y: 50),
+                                          turtleToRenderWith:fourthTurtle)
+        
         // Create a stochastic system
         coniferousTree = LindenmayerSystem(axiom: "SF",
                                           length: 20,
@@ -71,6 +87,10 @@ class Sketch : NSObject {
                                           pointToStartRenderingFrom: Point(x: 150, y: 400),
                                           turtleToRenderWith: thirdTurtle)
         
+        
+        
+        
+        
         // DEBUG:
         print("Rendering:")
         
@@ -80,9 +100,10 @@ class Sketch : NSObject {
     func draw() {
         
         // Update rendering of all systems for the current frame of the animation
-        kochIsland.update(forFrame: canvas.frameCount)
-        anotherKochConstruction.update(forFrame: canvas.frameCount)
-        coniferousTree.update(forFrame: canvas.frameCount)
+//        kochIsland.update(forFrame: canvas.frameCount)
+//        anotherKochConstruction.update(forFrame: canvas.frameCount)
+//        coniferousTree.update(forFrame: canvas.frameCount)
+        genericSystem.update(forFrame: canvas.frameCount)
 
     }
     
